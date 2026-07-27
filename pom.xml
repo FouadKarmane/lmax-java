@@ -1,17 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.karmane.lmax</groupId>
-    <artifactId>lmax-java</artifactId>
-    <version>1.0-SNAPSHOT</version>
+        <groupId>com.karmane.lmax</groupId>
+        <artifactId>lmax-java</artifactId>
+        <version>1.0-SNAPSHOT</version>
 
-    <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+        <properties>
+            <!-- The modern single property for Java 9 through Java 25 -->
+            <maven.compiler.release>25</maven.compiler.release>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+            <!-- Stable plugin versions providing seamless Java 25 & JUnit 5 support -->
+            <maven.compiler.version>3.13.0</maven.compiler.version>
+            <maven.surefire.version>3.5.0</maven.surefire.version>
+            <junit.jupiter.version>5.11.0</junit.jupiter.version>
+        </properties>
+
+        <dependencyManagement>
+            <dependencies>
+                <!-- Managed bill-of-materials ensures no mismatched JUnit artifacts -->
+                <dependency>
+                    <groupId>org.junit</groupId>
+                    <artifactId>junit-bom</artifactId>
+                    <version>${junit.jupiter.version}</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
+            </dependencies>
+        </dependencyManagement>
+
+        <dependencies>
+            <!-- Test-scoped aggregate dependency containing Jupiter API, Engine, and Params -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+
+        <build>
+            <plugins>
+                <!-- Compiler plugin handles the modern Java 25 environment setup -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.version}</version>
+                </plugin>
+
+                <!-- Surefire plugin coordinates test discovery and test lifecycle runs -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.version}</version>
+                </plugin>
+            </plugins>
+        </build>
 </project>
